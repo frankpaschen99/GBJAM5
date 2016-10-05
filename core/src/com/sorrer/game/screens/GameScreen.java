@@ -15,7 +15,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.sorrer.game.CoreGame;
 import com.sorrer.game.entities.Enemy;
 import com.sorrer.game.entities.Player;
+import com.sorrer.utils.Assets;
 import com.sorrer.utils.Calc;
+import com.sorrer.utils.CamUtils;
 import com.sorrer.utils.PrintLog;
 import com.sorrer.utils.entity.Entity;
 import com.sorrer.utils.entity.EntityDrawer;
@@ -71,9 +73,11 @@ public class GameScreen implements Screen{
 		update();
 		
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl20.glClearColor(10, 10, 10, 1);
 		b.setProjectionMatrix(cam.combined);
 		sr.setProjectionMatrix(cam.combined);
 		b.begin();
+		b.draw(Assets.manager.get(Assets.background), cam.position.x - cam.viewportWidth/2, cam.position.y - cam.viewportHeight/2);
 		LinkedList<EntityManager> em = new LinkedList<EntityManager>();
 		em.add(enemies);
 		em.add(players);
@@ -100,13 +104,11 @@ public class GameScreen implements Screen{
 		}
 		
 		
-		for(Entity e: enemies.getEntities()){
-			if(player.getAttackBox().overlaps(e.getRectangle()) && Calc.within(player.getPos().y, e.getPos().y, 5)){
-				Enemy en = (Enemy)e;
-				if(en.getPos().x < player.getPos().x){
-					en.damage(1, false);
-				}else{
-					en.damage(1, true);
+		if(Gdx.input.isKeyJustPressed(Keys.SPACE)){
+			for(Entity e: enemies.getEntities()){
+				if(player.getAttackBox().overlaps(e.getRectangle()) && Calc.within(player.getPos().y, e.getPos().y, 5)){
+					Enemy en = (Enemy)e;
+					en.damage(1, !player.isFlipped());
 				}
 			}
 		}
@@ -123,7 +125,7 @@ public class GameScreen implements Screen{
 				tt1 = true;
 				cam.position.x += cam.viewportWidth;
 			}
-		}else if(!player.getRectangle().overlaps(oldCam) && tt1){
+		}else if((!player.getRectangle().overlaps(oldCam)|| !player.getRectangle().overlaps(CamUtils.getRectangle(cam)) )&& tt1){
 			tt1 = false;
 		}
 		

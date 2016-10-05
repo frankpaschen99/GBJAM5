@@ -1,13 +1,8 @@
 package com.sorrer.utils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 
 public class Assets {
 	public static final AssetManager manager = new AssetManager();
@@ -31,8 +26,13 @@ public class Assets {
 //	
 //	public static final ParticleEffect fire_particle = new ParticleEffect();
 //	
+
+	public static final AssetDescriptor<Texture> strong = new AssetDescriptor<Texture>("strong.png", Texture.class);
+	public static final AssetDescriptor<Texture> human = new AssetDescriptor<Texture>("human.png", Texture.class);
+	public static final AssetDescriptor<Texture> background = new AssetDescriptor<Texture>("background.png", Texture.class);
 	
 	public static void load(){
+		PrintLog.printGame("Loading Files");
 //		fire_particle.load(Gdx.files.internal("fire.particle"), Gdx.files.internal(""));
 //		manager.load(fire_pit_empty);
 //		manager.load(fire_pit_full);
@@ -52,6 +52,10 @@ public class Assets {
 //		
 //		manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
 //		manager.load(dialog);
+
+		manager.load(strong);
+		manager.load(human);
+		manager.load(background);
 	}
 	
 	public static void dipose(){

@@ -1,10 +1,13 @@
 package com.sorrer.game.entities;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.sorrer.utils.Assets;
 import com.sorrer.utils.entity.Entity;
 
 import box2dLight.RayHandler;
@@ -15,10 +18,12 @@ public class Enemy extends Entity{
 	private float x,y;
 	private float acc = 0;
 	private long lastDamage = 0;
+	private Sprite Enemy;
 	
 	public Enemy(float x, float y){
 		this.x = x;
 		this.y = y;
+		Enemy = new Sprite(Assets.manager.get(Assets.human) );
 	}
 	
 	@Override
@@ -31,6 +36,15 @@ public class Enemy extends Entity{
 		}else if(acc != 0){
 			this.x += acc;
 			acc /= 1.1;
+		}
+		Enemy.setPosition(x, y);
+		
+		if(this.y > 144 - 100){
+			this.y = 144 - 100;
+		}
+		
+		if(this.y < 0){
+			this.y = 0;
 		}
 	}
 	
@@ -49,11 +63,15 @@ public class Enemy extends Entity{
 
 	@Override
 	public void draw(SpriteBatch b, ShapeRenderer sr) {
-		if(sr.isDrawing()) sr.end();
-		sr.begin(ShapeType.Line);
-		sr.setColor(Color.RED);
-		sr.rect(x, y, 12, 24);
-		sr.end();
+		Enemy.draw(b);
+//		
+//		if(sr.isDrawing()) sr.end();
+//		b.end();
+//		sr.begin(ShapeType.Line);
+//		sr.setColor(Color.RED);
+//		sr.rect(x, y, 12, 24);
+//		sr.end();
+//		b.begin();
 	}
 
 	@Override
