@@ -25,9 +25,14 @@ public class EntityDrawer {
 	
 	public static LinkedList<Entity> getArranged(LinkedList<EntityManager> em){
 		for(EntityManager en : em){
-			temp.addAll(en.getEntitiesRenderable());
+			temp.addAll(en.getEntities());
 //			temp2.addAll(en.getEntitiesRenderable());
 		}
+		
+		if(temp.isEmpty()){
+			return temp;
+		}
+		
 		Entity greatest = temp.getFirst();
 		
 		while(!temp.isEmpty()){
@@ -76,6 +81,63 @@ public class EntityDrawer {
 		return temp2;
 	}
 	
+	public static LinkedList<Entity> getArrangedRenderable(LinkedList<EntityManager> em){
+		for(EntityManager en : em){
+			temp.addAll(en.getEntitiesRenderable());
+//			temp2.addAll(en.getEntitiesRenderable());
+		}
+		
+		if(temp.isEmpty()){
+			return temp;
+		}
+		
+		Entity greatest = temp.getFirst();
+		
+		while(!temp.isEmpty()){
+			for(Entity e : temp){
+//			LinkedList<Entity> moveInfront = new LinkedList<Entity>();
+//			float closestY = 0;
+//			for(Entity t : temp){
+//				if(e == t){
+//					continue;
+//				}
+//				if(e.getPos().y < t.getPos().y & e.getRectangle().overlaps(t.getRectangle())){
+//					moveInfront.add(t);
+//					closestY = t.getPos().y;
+//				}
+//			}
+//			
+//			int index = temp2.indexOf(e);
+//			for(Entity s : moveInfront){
+//				if(s.getPos().y < closestY){
+//					closestY = s.getPos().y;
+//					index = temp2.indexOf(s);
+//				}
+//			}
+//			System.out.println(closestY + " " + e.getPos().y);
+//			
+//			if(temp2.indexOf(e) <= temp2.indexOf(moveInfront)){
+//				index = (index - 1 <= -1 ? 0 : index - 1);
+//				temp2.remove(e);
+//				temp2.add(index, e);
+//			}else{
+//				temp2.remove(e);
+//				temp2.add(index, e);
+//			}
+			
+				if(greatest.getPos().y < e.getPos().y){
+					greatest = e;
+				}
+			}
+			
+			temp.remove(greatest);
+			temp2.add(greatest);
+			if(!temp.isEmpty()){
+				greatest = temp.getFirst();
+			}
+		}
+		return temp2;
+	}
 	public static Entity getSelectedEntity(LinkedList<EntityManager> em, OrthographicCamera cam){
 		LinkedList<Entity> es = getArranged(em);
 		
@@ -88,5 +150,11 @@ public class EntityDrawer {
 		}
 		return selected;
 		
+	}
+
+	public static void draw(EntityManager enemies, SpriteBatch b, ShapeRenderer sr) {
+		LinkedList<EntityManager> em = new LinkedList<EntityManager>();
+		em.add(enemies);
+		EntityDrawer.draw(em, b, sr);
 	}
 }
