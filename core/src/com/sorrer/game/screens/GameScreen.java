@@ -24,38 +24,41 @@ import com.sorrer.utils.entity.EntityDrawer;
 import com.sorrer.utils.entity.EntityManager;
 
 public class GameScreen implements Screen{
+	// Reference to CoreGame
 	private CoreGame game;
+	// Player
 	Player player = new Player(10, 10);
+	// EntityManager for enemies and players
 	EntityManager enemies, players;
 	OrthographicCamera cam;
+	// FitViewport to make sure aspect ratio is locked
 	FitViewport fv;
 	SpriteBatch b;
 	ShapeRenderer sr;
 	
 	public GameScreen(CoreGame game){
 		this.game = game;
-
 		cam = new OrthographicCamera();
-		
 		b = new SpriteBatch();
 		sr = new ShapeRenderer();
 		
+		// Camera stuff
 		fv = new FitViewport(160, 144, cam);
-
 		fv.setScreenSize(640, 576);
 		fv.apply();
-		
 		cam.position.set(cam.viewportWidth/2, cam.viewportHeight/2, 0);
 
 		enemies = new EntityManager(cam, null,b,sr,null);
 		players = new EntityManager(cam, null,b,sr,null);
 
+		// no idea
 		oldCam = new Rectangle(cam.position.x - cam.viewportWidth/2, cam.position.y - cam.viewportHeight/2, cam.viewportWidth, cam.viewportHeight);
 		
 		players.add(player);
 		players.update();
 		Random random = new Random();
 		for(int i = 0; i < 20; i++){
+			// spawn 20 enemies at random x and y coordinates
 			enemies.add(new Enemy(random.nextInt(160), random.nextInt(90)));
 		}
 		enemies.update();
@@ -90,23 +93,28 @@ public class GameScreen implements Screen{
 	
 	public void update(){
 		if(Gdx.input.isKeyPressed(Keys.A)){
+			// a pressed, move left and flip sprite
 			player.moveX(-1.5f);
 			player.flip(true);
 		}else if(Gdx.input.isKeyPressed(Keys.D)){
+			// d pressed, move right and flip sprite
 			player.moveX(1.5f);
 			player.flip(false);
 		}
 
 		if(Gdx.input.isKeyPressed(Keys.W)){
+			// w pressed, move up on the y axis (2.5d shit)
 			player.moveY(.5f);
 		}else if(Gdx.input.isKeyPressed(Keys.S)){
+			// s pressed, move down on the y axis
 			player.moveY(-.5f);
 		}
 		
-		
 		if(Gdx.input.isKeyJustPressed(Keys.SPACE)){
 			for(Entity e: enemies.getEntities()){
+				// foreach enemy, if the player's attack box overlaps the enemy's bounding box and is within 5 pixels on the y axis of the enemy, damage the enemy.
 				if(player.getAttackBox().overlaps(e.getRectangle()) && Calc.within(player.getPos().y, e.getPos().y, 5)){
+					// cast entity to enemy, OK because enemy is subclass of entity
 					Enemy en = (Enemy)e;
 					en.damage(1, !player.isFlipped());
 				}
@@ -115,6 +123,7 @@ public class GameScreen implements Screen{
 
 		players.update();
 		enemies.update();
+		// Don't think im gonna try to understand this. Probably has to do with switching screens when player hits the border.
 		if(!tt1){
 			if(player.getPos().x < (cam.position.x - cam.viewportWidth/2)){
 				oldCam = new Rectangle(cam.position.x - cam.viewportWidth/2, cam.position.y - cam.viewportHeight/2, cam.viewportWidth, cam.viewportHeight);
@@ -134,6 +143,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
+		// fv.update placed here because it has to fix itself when the user adjusts the window
 		fv.update(width, height);
 	}
 

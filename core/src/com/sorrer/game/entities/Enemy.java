@@ -1,11 +1,8 @@
 package com.sorrer.game.entities;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.sorrer.utils.Assets;
 import com.sorrer.utils.entity.Entity;
@@ -52,7 +49,7 @@ public class Enemy extends Entity{
 		if(System.currentTimeMillis() + 1000 > lastDamage){
 			lastDamage = System.currentTimeMillis();
 			this.health -= damage;
-			System.out.println(health);
+			// System.out.println(health);
 			if(left){
 				this.acc = 4;
 			}else{
@@ -64,14 +61,6 @@ public class Enemy extends Entity{
 	@Override
 	public void draw(SpriteBatch b, ShapeRenderer sr) {
 		Enemy.draw(b);
-//		
-//		if(sr.isDrawing()) sr.end();
-//		b.end();
-//		sr.begin(ShapeType.Line);
-//		sr.setColor(Color.RED);
-//		sr.rect(x, y, 12, 24);
-//		sr.end();
-//		b.begin();
 	}
 
 	@Override
@@ -98,5 +87,4 @@ public class Enemy extends Entity{
 	public Vector2 getSize() {
 		return new Vector2(12, 24);
 	}
-	
 }
